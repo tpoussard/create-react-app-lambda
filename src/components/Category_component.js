@@ -33,10 +33,10 @@ export default class Category extends Component {
     
     filteritems (CategoryName) {  
       const { data } = this.props;
-      let filteredItems = data.filter(function (e) {
-        return e.category_name === CategoryName;
-      }).map(obj => obj.name);
-    return filteredItems;
+      const categoryData = data.filter(function (e) {
+        return e.key === CategoryName;
+      })[0].data
+      return categoryData.map(obj => obj.key);
     }
 
       createItemElements = (CategoryName) => (
