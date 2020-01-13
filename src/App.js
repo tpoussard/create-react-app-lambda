@@ -1,50 +1,64 @@
-import React, { Component } from "react"
-import logo from "./logo.svg"
-import "./App.css"
-
-class LambdaDemo extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { loading: false, msg: null }
-  }
-
-  handleClick = api => e => {
-    e.preventDefault()
-
-    this.setState({ loading: true })
-    fetch("/.netlify/functions/" + api)
-      .then(response => response.json())
-      .then(json => this.setState({ loading: false, msg: json.msg }))
-  }
-
-  render() {
-    const { loading, msg } = this.state
-
-    return (
-      <p>
-        <button onClick={this.handleClick("hello")}>{loading ? "Loading..." : "Call Lambda"}</button>
-        <button onClick={this.handleClick("async-dadjoke")}>{loading ? "Loading..." : "Call Async Lambda"}</button>
-        <br />
-        <span>{msg}</span>
-      </p>
-    )
-  }
-}
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+import Category from './components/Category_component';
 
 class App extends Component {
+  state = {
+    data: []
+  }
+
+  componentDidMount(){
+    // Call our fetch function below once the component mounts
+    this.callBackendAPI()
+    .then(res => this.setState({ data: res }))      
+    .catch(err => console.log(err));
+  }
+  
+  callBackendAPI = async () => {
+    const response = await fetch('http://checkngo.ighilr.fr/api/items/');
+    const body = await response.json();
+    
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    let now = new Date();
+    console.log("Data has been fetched !", now);
+    return body;
+  }
+
+  createCategoryElement = CategoryName => (
+    <Category
+    CategoryName={CategoryName}
+    data={this.state.data}
+    key={CategoryName}
+    />
+    )
+
+    filterCategories = () => {  
+      const { data } = this.state;
+      return [...new Set(data.map(item => item.category_name))];
+    }
+
+      createCategoryElements = () => (
+        this.filterCategories().map(this.createCategoryElement)
+      )
+
   render() {
+    const {data} = this.state;
+    
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload. Test ?
-          </p>
-          <LambdaDemo />
+          <h1 className='App-title'>Let's pack !</h1>
         </header>
+        <div id='App-form' data={data}>
+          {this.createCategoryElements()}
+        </div>
       </div>
-    )
+    );
   }
 }
 
-export default App
+export default App;
