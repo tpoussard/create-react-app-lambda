@@ -3,58 +3,63 @@ import React, { Component } from 'react';
 import Item from './Item_component';
 
 export default class Category extends Component {
-  constructor(props) {
-    super(props);
-    this.selectedCheckboxes = new Set();
+  state = {
+    checkedBoxes: new Set()
+
   }
-  
-  toggleCheckbox = ItemName => {
-    if (this.selectedCheckboxes.has(ItemName)) {
-      this.selectedCheckboxes.delete(ItemName);
-    }else{
-      this.selectedCheckboxes.add(ItemName);
+
+  componentDidMount() {
+    const previousItems = localStorage.getItem(this.props.CategoryName)
+    if (previousItems) {
+      this.setState({ checkedBoxes: new Set(JSON.parse(previousItems)) })
     }
   }
-  
+
+  toggleCheckbox = itemName => {
+
+    const newValue = new Set([...this.state.checkedBoxes])
+    if (this.state.checkedBoxes.has(itemName)) {
+      newValue.delete(itemName);
+      this.setState({ checkedBoxes: newValue });
+    } else {
+      newValue.add(itemName);
+      this.setState({ checkedBoxes: newValue });
+    }
+  }
+
+  checkedItem = (itemName) => this.state.checkedBoxes.has(itemName);
+
   handleFormSubmit = formSubmitEvent => {
     formSubmitEvent.preventDefault();
-    for (const checkbox of this.selectedCheckboxes) {
-      console.log(checkbox, 'is selected');
-    }
+    localStorage.setItem(this.props.CategoryName, JSON.stringify([...this.state.checkedBoxes]))
   }
-  
-  createItemElement = ItemName => (
+
+  createItemElement = itemName => (
     <Item
-    ItemName={ItemName}
+    itemName={itemName}
     handleCheckboxChange={this.toggleCheckbox}
-    key={ItemName}
+    key={itemName}
+    checkedItem={this.checkedItem(itemName)}
     />
     )
     
-    filteritems (CategoryName) {  
-      const { data } = this.props;
-      const categoryData = data.filter(function (e) {
-        return e.key === CategoryName;
-      })[0].data
-      return categoryData.map(obj => obj.key);
-    }
-
-      createItemElements = (CategoryName) => (
-        this.filteritems(CategoryName).map(this.createItemElement)
-      )
+  createItemElements = () => {
+    console.log(' inside createItemElements ', this.state.checkedBoxes)
+    return this.props.data.map(this.createItemElement)
+}
 
   render() {
     const { CategoryName } = this.props;
 
     return (
       <div id='App-form'>
-      <div className="category">
-        <h3> { CategoryName } </h3>
+        <div className="category">
+          <h3> {CategoryName} </h3>
           <form className="inner" onSubmit={this.handleFormSubmit}>
             {this.createItemElements(CategoryName)}
-          <button className="btn" type="submit">Save</button>
-        </form>
-    </div>
+            <button className="btn" type="submit">Save</button>
+          </form>
+        </div>
       </div>
     )
   }
