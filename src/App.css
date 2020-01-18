@@ -52,6 +52,12 @@
   padding-left: 25px;
 }
 
+#App-form .container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 #App-form .btn{
   align-self: center;
   margin: 10px;

@@ -35,26 +35,28 @@ export default class Category extends Component {
 
   createItemElement = itemName => (
     <Item
-    itemName={itemName}
-    handleCheckboxChange={this.toggleCheckbox}
-    key={itemName}
-    checkedItem={this.checkedItem(itemName)}
+      itemName={itemName}
+      handleCheckboxChange={this.toggleCheckbox}
+      key={itemName}
+      checkedItem={this.checkedItem(itemName)}
     />
-    )
-    
+  )
+
   createItemElements = () => this.props.data.map(this.createItemElement);
 
   render() {
     const { CategoryName } = this.props;
 
     return (
-      <div id='App-form'>
-        <div className="category">
-          <h3> {CategoryName} </h3>
-          <form className="inner" onSubmit={this.handleFormSubmit}>
-            {this.createItemElements(CategoryName)}
-            <button className="btn" type="submit">Save</button>
-          </form>
+      <div id="App-form">
+        <div className="container">
+          <div className="category">
+            <h3> {CategoryName} </h3>
+            <form className="inner" onSubmit={this.handleFormSubmit}>
+              {this.createItemElements(CategoryName)}
+            </form>
+          </div>
+          <button className="btn" type="submit">Save</button>
         </div>
       </div>
     )
