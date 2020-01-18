@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 export default class Item extends Component {
 
-
   toggleCheckboxChange = () => {
     const { handleCheckboxChange, itemName } = this.props;
     handleCheckboxChange(itemName);

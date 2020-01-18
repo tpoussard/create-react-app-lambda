@@ -59,7 +59,6 @@ class App extends Component {
 
   filterCategories = () => {
     const { data } = this.state;
-    console.log('data', data)
     if (data && data.length > 0) {
       return [...new Set(data.map(item => item.key))];
       // return [...new Set(data.map(item => item.category_name))];

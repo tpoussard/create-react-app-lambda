@@ -16,7 +16,6 @@ export default class Category extends Component {
   }
 
   toggleCheckbox = itemName => {
-
     const newValue = new Set([...this.state.checkedBoxes])
     if (this.state.checkedBoxes.has(itemName)) {
       newValue.delete(itemName);
@@ -43,10 +42,7 @@ export default class Category extends Component {
     />
     )
     
-  createItemElements = () => {
-    console.log(' inside createItemElements ', this.state.checkedBoxes)
-    return this.props.data.map(this.createItemElement)
-}
+  createItemElements = () => this.props.data.map(this.createItemElement);
 
   render() {
     const { CategoryName } = this.props;
