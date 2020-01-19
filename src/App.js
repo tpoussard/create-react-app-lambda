@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.png';
 import './App.css';
-import Category from './components/Category_component';
+import Category from './components/useCategory';
 const jsonData = require('./fr.json');
 
 class App extends Component {
